@@ -30,12 +30,13 @@ def rescale_frame(frame, percent=75):
 
 
 
-# Recording
-filename = 'video.avi'
-frames_per_second = 24.0
-res = '720p'
+# Recording  (did not work)
+filename = 'video.mp4'
+frames_per_second = 10
+res = '240p'
 
 STD_DIMENSIONS =  {
+    "240p": (320, 240),
     "480p": (640, 480),
     "720p": (1280, 720),
     "1080p": (1920, 1080),
@@ -53,8 +54,8 @@ def get_dims(cap, res='1080p'):
 
 VIDEO_TYPE = {
     'avi': cv2.VideoWriter_fourcc(*'XVID'),
-    #'mp4': cv2.VideoWriter_fourcc(*'H264'),
-    'mp4': cv2.VideoWriter_fourcc(*'XVID'),
+    'mp4': cv2.VideoWriter_fourcc(*'H264'),
+    #'mp4': cv2.VideoWriter_fourcc(*'XVID'),
 }
 
 def get_video_type(filename):
@@ -65,11 +66,30 @@ def get_video_type(filename):
 
 out = cv2.VideoWriter(filename, get_video_type(filename), frames_per_second, get_dims(cap, res))
 
-# Main runner part
+
+
+# Face recognation and identification
+face_cascade = cv2.CascadeClassifier('cascades\data\haarcascade_frontalface_alt2.xml')
+
+
+# Main runner part (this always changes regard to using parts above)
 while(True):
     ret, frame = cap.read()
 
-    #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5)
+    for (x, y, w, h) in faces:
+        # print(x, y, w, h)
+        # roi_color = frame[y:y+h, x:x+w]
+        # img_item = 'img_item.png'
+        # cv2.imwrite(img_item, roi_color)
+
+        color = (255, 0, 0)
+        stroke = 2
+        end_cord_x = x+w
+        end_cord_y = y+h
+        cv2.rectangle(frame, (x,y), (end_cord_x, end_cord_y), color, stroke)
+
 
     cv2.imshow('Asosiy',frame)
     #cv2.imshow('Kulrang',gray)
