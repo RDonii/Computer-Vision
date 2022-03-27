@@ -26,6 +26,8 @@ for root, dirs, files in os.walk(image_dir):
             id_ = label_ids[label]
             # print(f'label: {label}\n path: {path}')
             pil_image = Image.open(path).convert("L")
+            #size = (550, 550)
+            # final_image = pil_image.resize(size, Image.ANTIALIAS) # resizing effected badly for me, so I commented it
             image_array = np.array(pil_image, "uint8")
             # print(f'pil_image: {pil_image}\n image_array: {image_array}')
             faces = face_cascade.detectMultiScale(image_array, scaleFactor=1.5, minNeighbors=5)
@@ -34,7 +36,7 @@ for root, dirs, files in os.walk(image_dir):
                 roi = image_array[y:y+h, x:x+w]
                 x_train.append(roi)
                 y_labels.append(id_)
-
+print(label_ids)
 with open('pickles/labels.pickle', 'wb') as f:
     pickle.dump(label_ids, f)
 
