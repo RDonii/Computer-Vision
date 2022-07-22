@@ -65,9 +65,7 @@ def get_video_type(filename):
       return  VIDEO_TYPE[ext]
     return VIDEO_TYPE['avi']
 
-out = cv2.VideoWriter(filename, get_video_type(filename), frames_per_second, get_dims(cap, res))
-
-
+# out = cv2.VideoWriter(filename, get_video_type(filename), frames_per_second, get_dims(cap, res))
 
 # Face recognation and identification
 face_cascade = cv2.CascadeClassifier('cascades\data\haarcascade_frontalface_alt2.xml')
@@ -90,9 +88,9 @@ while(True):
         # print(x, y, w, h)
         #roi_color = frame[y:y+h, x:x+w]
         roi_gray = gray[y:y+h, x:x+w]
-
+        roi_gray = cv2.resize(roi_gray, (30, 30))
         id_, conf = recognizer.predict(roi_gray)
-        if conf >= 45 and conf <= 85:
+        if conf >= 90:
             print(id_)
             print(labels[id_])
             font = cv2.FONT_HERSHEY_SIMPLEX
@@ -119,5 +117,5 @@ while(True):
 
 # When everything done, release the capture
 cap.release()
-out.release()
+# out.release()
 cv2.destroyAllWindows()

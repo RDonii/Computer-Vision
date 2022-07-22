@@ -34,6 +34,7 @@ for root, dirs, files in os.walk(image_dir):
 
             for (x, y, w, h) in faces:
                 roi = image_array[y:y+h, x:x+w]
+                roi = cv2.resize(roi, (30, 30))
                 x_train.append(roi)
                 y_labels.append(id_)
 print(label_ids)
